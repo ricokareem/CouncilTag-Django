@@ -5,6 +5,8 @@ from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 class Tag(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(null=True)
+    icon = models.CharField(max_length=100, null=True)
 
 class Committee(models.Model):
     name = models.CharField(max_length=250)
@@ -22,7 +24,8 @@ class AgendaItem(models.Model):
     )
     sponsors = models.CharField(max_length=250, null=True)
     agenda = models.ForeignKey(Agenda, related_name='items')
-    meeting_time = models.PositiveIntegerField() # Copy from Agenda for use in get items by tag
+    meeting_time = models.PositiveIntegerField(default=0)#Unix timestamp
+
     tags = models.ManyToManyField(Tag)
 
 class AgendaRecommendation(models.Model):
@@ -39,3 +42,8 @@ class EngageUserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)
 
+class Message(models.Model):
+    user = models.OneToOneField(User)
+    content = models.TextField()
+    agenda_item = models.ForeignKey(AgendaItem, related_name="messages")
+    sent = models.PositiveIntegerField(default=0) #Unix timestamp
