@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^=azgctyvokgt(iv(sf0*6k0=gj+#c-!x805u6ofg!27!dpjjw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','council-tag-dev.herokuapp.com', 'council-tag.herokuapp.com', '127.0.0.1']
 
@@ -40,9 +40,7 @@ INSTALLED_APPS = [
     'CouncilTag.ingest',
     'rest_framework',
     'CouncilTag.api',
-    'CouncilTag.frontend',
     'corsheaders',
-    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +126,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -147,9 +144,9 @@ AUTHENTICATION_BACKENDS = ['CouncilTag.api.backends.EmailPasswordBackend']
 
 CORS_URLS_REGEX = r'^/api/.*$'
 
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': '/',  # end with slash
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-local.json'),
-    }
-}
+SENDGRID_API_KEY = os.environ.get('SENDGRID_KEY')
+
+if DEBUG:
+    COUNCIL_CLERK_EMAIL = 'shariq.torres@gmail.com'
+else:
+    COUNCIL_CLERK_EMAIL = 'clerk@smgov.net'
