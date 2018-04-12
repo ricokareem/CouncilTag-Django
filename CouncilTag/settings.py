@@ -140,7 +140,7 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 CORS_ORIGIN_WHITELIST = (
-    'https://engage-santa-monica.herokuapp.com',
+    'engage-santa-monica.herokuapp.com',
 )
 AUTHENTICATION_BACKENDS = ['CouncilTag.api.backends.EmailPasswordBackend']
 
