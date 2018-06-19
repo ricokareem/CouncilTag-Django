@@ -18,6 +18,7 @@ from CouncilTag import settings
 from rest_framework.renderers import JSONRenderer
 from psycopg2.extras import NumericRange
 
+from validate_email import validate_email
 
 class SmallResultsPagination(LimitOffsetPagination):
     default_limit = 2
@@ -116,11 +117,17 @@ def signup_user(request, format=None):
     email = data['email']
     password = data['password']
     username = data['name']
-    user = User.objects.create_user(username, email, password)
-    # Don't need to save any values from it
-    EngageUserProfile.objects.create(user=user)
-    token = jwt.encode({"username": user.email}, settings.SECRET_KEY)
-    return Response({"token": token}, status=201)
+
+    is_valid = validate_email(email,verify=True)
+
+    if is_valid:
+        user = User.objects.create_user(username, email, password)
+        # Don't need to save any values from it
+        EngageUserProfile.objects.create(user=user)
+        token = jwt.encode({"username": user.email}, settings.SECRET_KEY)
+        return Response({"token": token}, status=201)
+    else:
+        return Response({"error": "that email address is invalid, please try again"}, status=400)
 
 
 @api_view(['GET'])
